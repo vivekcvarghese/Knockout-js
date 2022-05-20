@@ -13,6 +13,10 @@
                
             ]);
 
+            // this.products(this.products().map((data)=>{
+            //     return {name:data.name,price:data.price,quantity:ko.observable(data.quantity)}
+            //   }))
+
             this.total = ko.observable(0);
             this.cart = ko.observableArray([]);
 
@@ -41,8 +45,7 @@
                 // console.log(match)
                 if(match == false){
 
-                    this.cart.push(item);
-                    this.total(this.total() + item.price);
+                    
                     // add item to cart
                     fetch("http://localhost:5000/items", {
                         method: "POST",
@@ -54,6 +57,8 @@
                         .then((response) => response.json())
                         .then((data) => {
                             console.log(data.response);
+                            this.cart.push(item);
+                            this.total(this.total() + item.price);
                         })
                         .catch((error) => {
                             console.error("Error:", error);
