@@ -1,5 +1,9 @@
 
          function AppViewModel() {
+
+            if (sessionStorage.getItem('AuthenticationState') === null) {
+                window.location.href = './login.html';
+             }
             this.items = ko.observableArray([
                 { id:1, name: 'Shoe', price:40},
                 { id:2, name: 'Bag', price:20},
@@ -19,6 +23,12 @@
 
             this.total = ko.observable(0);
             this.cart = ko.observableArray([]);
+
+            $.ajaxSetup({
+                headers: {
+                  Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                },
+              });
 
             $.getJSON("http://localhost:5000/items", (items) => {
     
@@ -51,6 +61,7 @@
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
+                            Authorization: `Bearer ${sessionStorage.getItem("token")}`
                         },
                         body: JSON.stringify(item),
                         })
@@ -81,7 +92,14 @@
                 window.location.href = './cart.html';
             };
 
-           
+            this.logout = () => {
+                sessionStorage.clear();
+                window.location.href = './login.html';
+            };
 
          }
          ko.applyBindings(new AppViewModel());
+
+
+
+        

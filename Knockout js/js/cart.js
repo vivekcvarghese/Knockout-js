@@ -1,6 +1,15 @@
 function Cart() {
+    if (sessionStorage.getItem('AuthenticationState') === null) {
+        window.location.href = './login.html';
+     }
     this.cart = ko.observableArray([]);
     this.total = ko.observable(0);
+    
+    $.ajaxSetup({
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+      });
 
     $.getJSON("http://localhost:5000/items", (items) => {
     
